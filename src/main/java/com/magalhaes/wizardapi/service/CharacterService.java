@@ -11,9 +11,11 @@ import java.util.List;
 public class CharacterService {
 
     private CharacterRepository characterRepository;
+    private HouseService houseService;
 
-    public CharacterService(CharacterRepository characterRepository) {
+    public CharacterService(CharacterRepository characterRepository, HouseService houseService) {
         this.characterRepository = characterRepository;
+        this.houseService = houseService;
     }
 
     public Character findById(Long id) {
@@ -25,15 +27,16 @@ public class CharacterService {
         return characterRepository.findAllByHouse(house);
     }
 
-    public Character update(Character character) {
-        return characterRepository.save(character);
-    }
-
-    public Character create(Character character) {
+    public Character save(Character character) {
+        validate(character);
         return characterRepository.save(character);
     }
 
     public void delete(Long id) {
         characterRepository.deleteById(id);
+    }
+
+    private boolean validate(Character character) {
+        return houseService.getHouseByApiId(character.getHouse()) != null;
     }
 }

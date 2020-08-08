@@ -35,13 +35,13 @@ public class CharacterController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public CharacterDTO updateCharacter(@RequestBody CharacterDTO dto) {
-        return new CharacterDTO(characterService.update(dto.toCharacter()));
+        return new CharacterDTO(characterService.save(dto.toCharacter()));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CharacterDTO createCharacter(@RequestBody CharacterDTO dto) {
-        return new CharacterDTO(characterService.create(dto.toCharacter()));
+        return new CharacterDTO(characterService.save(dto.toCharacter()));
     }
 
     @DeleteMapping("/{id}")
