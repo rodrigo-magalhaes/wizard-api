@@ -91,8 +91,7 @@ annotation **@HystrixProperty** to specify the timeout for a request. By default
 so the application waits for 5 seconds before transfer the execution to the method in fallbackMethod 
 
 
-###Cache
-
+##Cache
 All successful requests generate a new **house** on H2 database table. Before each request, a call to the database is done
 to guarantee that a request has to be made. So after the first request, all others that search for the same house api id
 will be retrieved from the database and not from the [potterapi](www.potterapi.com) anymore.
