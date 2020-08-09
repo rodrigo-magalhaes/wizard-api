@@ -8,20 +8,22 @@ The house information is validated with a call to
 exists in this universe
 
 ##Technologies 
-- [Java 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) - language used to develop
-- [Maven 3.6](https://maven.apache.org/) - dependency manager used to build the project
-- [lombok](https://projectlombok.org/) - code generation 
-- [Spring Boot 2.3](https://spring.io/projects/spring-boot) - used to regulate version dependencies, 
+
+* [Java 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) - language used to develop
+* [Maven 3.6](https://maven.apache.org/) - dependency manager used to build the project
+* [lombok](https://projectlombok.org/) - code generation 
+* [Spring Boot 2.3](https://spring.io/projects/spring-boot) - used to regulate version dependencies, 
 embed server application and add some configurations by default
-- [H2](https://www.h2database.com/html/main.html) - in memory database
-- [Spring Data](https://spring.io/projects/spring-data) - used to manage database connection
-- [Spring Cloud](https://spring.io/projects/spring-cloud) - used to implement circuit braker
-- [Spring Web](https://spring.io/guides/gs/serving-web-content/) - used to receive http requests and responses
-- [Jackson](https://github.com/FasterXML/jackson) - used to transform from json to object and vice versa
-- [JUnit 5](https://junit.org/junit5/) - used to develop tests
-- [Intellij](https://www.jetbrains.com/idea/) - ide used to code
+* [H2](https://www.h2database.com/html/main.html) - in memory database
+* [Spring Data](https://spring.io/projects/spring-data) - used to manage database connection
+* [Spring Cloud](https://spring.io/projects/spring-cloud) - used to implement circuit braker
+* [Spring Web](https://spring.io/guides/gs/serving-web-content/) - used to receive http requests and responses
+* [Jackson](https://github.com/FasterXML/jackson) - used to transform from json to object and vice versa
+* [JUnit 5](https://junit.org/junit5/) - used to develop tests
+* [Intellij](https://www.jetbrains.com/idea/) - ide used to code
 
 ##Get the project running
+
 To those who want to play with or build upon, follow these steps:
 ```shell
 //clone the repository
@@ -38,6 +40,7 @@ mvn spring-boot:run
 ```
 
 ##API
+
 Make a request to this endpoint to start 
 ```shell
 /api/characters
@@ -53,11 +56,11 @@ using this json as exemple
 }
 ```
 **name** and **house** are mandatory, so dont forget to pass it 
-- Create a new character, passing the json above (as exemple)
+* Create a new character, passing the json above (as exemple)
 ```shell
 POST /api/characters
 ```
-- Read a single character or all characters
+* Read a single character or all characters
 ```shell
 //list all characters in the database
 GET /api/characters
@@ -66,17 +69,18 @@ GET /api/characters/{id}
 //list all characters by house
 GET /api/characters?house=xyz
 ```
-- Update a single character
+* Update a single character
 ```shell
 //id is mandatory, so it must be provided on the json
 PUT /api/characters
 ```
-- Delete a single character
+* Delete a single character
 ```shell
 DELETE /api/characters/{id}
 ```
 
 ##Circuit Breaker
+
 Hystrix is used as circuit breaker
 ```java
 @HystrixCommand(fallbackMethod = "houseError", commandProperties = {
@@ -86,7 +90,7 @@ Hystrix is used as circuit breaker
         //code ...
     }
 ```
-**fallbackMethod** is used to call another method in case anything goes wrong.It was needed to pass a property using the 
+The **fallbackMethod** in **@HystrixCommand** is used to call another method in case anything goes wrong.It was needed to pass a property using the 
 annotation **@HystrixProperty** to specify the timeout for a request. By default it uses another thread to obtain the response, 
 so the application waits for 5 seconds before transfer the execution to the method in fallbackMethod 
 
