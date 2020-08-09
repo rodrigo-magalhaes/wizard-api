@@ -34,6 +34,8 @@ class CharacterControllerTest {
 
     @Autowired
     private CharacterRepository characterRepository;
+    @Autowired
+    private ObjectMapper mapper;
     @Mock
     private HouseService houseService;
 
@@ -46,7 +48,7 @@ class CharacterControllerTest {
         MockitoAnnotations.initMocks(this);
         characterTest = characterRepository.saveAndFlush(CharacterTestHelper.create());
         CharacterService characterService = new CharacterService(characterRepository, houseService);
-        mockMvc = MockMvcBuilders.standaloneSetup(new CharacterController(characterService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new CharacterController(characterService, mapper)).build();
         doReturn(House.builder()
                 .name(characterTest.getName())
                 .apiId(characterTest.getHouse())
@@ -72,7 +74,7 @@ class CharacterControllerTest {
     }
 
     @Test
-    void getCharacterWithFilter() throws Exception {
+    void getCharacters() throws Exception {
         mockMvc.perform(get(URL_API + "?house={house}", characterTest.getHouse()).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id").value(characterTest.getId()))
@@ -86,11 +88,11 @@ class CharacterControllerTest {
     @Test
     void getCharacterShouldReturnErrorMessage() throws Exception {
         doThrow(new HouseException(characterTest.getHouse())).when(houseService).getHouseByApiId(anyString());
-        CharacterDTO dto = new CharacterDTO(characterTest);
+        CharacterDTO dto = mapper.convertValue(characterTest, CharacterDTO.class);
         Exception exception = assertThrows(Exception.class,
                 () -> mockMvc.perform(put(URL_API)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsBytes(dto))));
+                        .content(mapper.writeValueAsBytes(dto))));
         assertTrue(exception.getMessage().contains(characterTest.getHouse()));
     }
 
@@ -101,8 +103,8 @@ class CharacterControllerTest {
         characterTest.setPatronus("new patronus");
         characterTest.setRole("new role");
         characterTest.setSchool("new school");
-        CharacterDTO dto = new CharacterDTO(characterTest);
-        mockMvc.perform(put(URL_API).contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsBytes(dto))
+        CharacterDTO dto = mapper.convertValue(characterTest, CharacterDTO.class);
+        mockMvc.perform(put(URL_API).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(dto))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(characterTest.getId()))
@@ -115,8 +117,8 @@ class CharacterControllerTest {
 
     @Test
     void createCharacter() throws Exception {
-        CharacterDTO dto = new CharacterDTO(CharacterTestHelper.create());
-        mockMvc.perform(post(URL_API).contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsBytes(dto))
+        CharacterDTO dto = mapper.convertValue(characterTest, CharacterDTO.class);
+        mockMvc.perform(post(URL_API).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(dto))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())

@@ -3,9 +3,11 @@ package com.magalhaes.wizardapi.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
-public class CharacterDTO {
+public class CharacterUpdateDTO {
+    @NotNull(message = "id is mandatory")
     private long id;
     @NotBlank(message = "Name cannot be blank")
     private String name;
@@ -15,6 +17,6 @@ public class CharacterDTO {
     private String house;
     private String patronus;
 
-    public CharacterDTO() {
+    public CharacterUpdateDTO() {
     }
 }

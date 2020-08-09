@@ -61,7 +61,7 @@ class CharacterServiceTest {
 
     @Test
     void findByHouse() {
-        assertFalse(characterService.findByHouse(characterTest.getHouse()).isEmpty());
+        assertFalse(characterService.find(characterTest.getHouse()).isEmpty());
     }
 
     @Test

@@ -5,8 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class CharacterDTO {
-    private long id;
+public class CharacterCreateDTO {
     @NotBlank(message = "Name cannot be blank")
     private String name;
     private String role;
@@ -15,6 +14,6 @@ public class CharacterDTO {
     private String house;
     private String patronus;
 
-    public CharacterDTO() {
+    public CharacterCreateDTO() {
     }
 }

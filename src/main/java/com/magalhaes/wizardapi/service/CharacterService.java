@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CharacterService {
@@ -23,8 +24,11 @@ public class CharacterService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<Character> findByHouse(String house) {
-        return characterRepository.findAllByHouse(house);
+    public List<Character> find(String house) {
+        if (house != null) {
+            return characterRepository.findAllByHouse(house);
+        }
+        return characterRepository.findAll();
     }
 
     public Character save(Character character) {
@@ -37,6 +41,11 @@ public class CharacterService {
     }
 
     private boolean validate(Character character) {
-        return houseService.getHouseByApiId(character.getHouse()) != null;
+        if (character.getId() > 0) {
+            characterRepository.findById(character.getId()).orElseThrow(EntityNotFoundException::new);
+        }
+        return Optional.ofNullable(houseService.getHouseByApiId(character.getHouse()))
+                .map(newHouse -> houseService.save(newHouse))
+                .isPresent();
     }
 }

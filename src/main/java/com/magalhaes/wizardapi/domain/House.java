@@ -3,12 +3,11 @@ package com.magalhaes.wizardapi.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"apiId"})})
 public class House {
     @Id
     @GeneratedValue

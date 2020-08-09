@@ -7,6 +7,7 @@ import com.magalhaes.wizardapi.domain.House;
 import com.magalhaes.wizardapi.exception.HouseException;
 import com.magalhaes.wizardapi.repository.HouseRepository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,13 @@ public class HouseService {
         this.mapper = objectMapper;
     }
 
-    @HystrixCommand(fallbackMethod = "houseError")
+    public House save(House house) {
+        return houseRepository.save(house);
+    }
+
+    @HystrixCommand(fallbackMethod = "houseError", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")
+    })
     public House getHouseByApiId(String houseApiId) {
 
         House house = houseRepository.findByApiId(houseApiId);
@@ -50,8 +57,8 @@ public class HouseService {
         throw new HouseException(houseApiId);
     }
 
-    private JsonNode getJsonResponse(String houseApiId)  {
-        try{
+    private JsonNode getJsonResponse(String houseApiId) {
+        try {
             ResponseEntity<String> responseEntity = new RestTemplate()
                     .getForEntity(url + "/houses/{houseId}?key={apiKey}", String.class, houseApiId, key);
             return mapper.readTree(responseEntity.getBody()).get(0);
@@ -61,10 +68,9 @@ public class HouseService {
     }
 
     private House newHouse(JsonNode jsonNode) {
-        final House newHouse = House.builder()
+        return House.builder()
                 .apiId(jsonNode.get("_id").asText())
                 .name(jsonNode.get("name").asText())
                 .build();
-        return houseRepository.save(newHouse);
     }
 }
