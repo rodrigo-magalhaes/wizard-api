@@ -7,7 +7,7 @@ The house information is validated with a call to
 [potterapi](www.potterapi.com) to ensure that the house
 exists in this universe
 
-##Technologies 
+## Technologies 
 
 * [Java 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) - language used to develop
 * [Maven 3.6](https://maven.apache.org/) - dependency manager used to build the project
@@ -22,7 +22,7 @@ embed server application and add some configurations by default
 * [JUnit 5](https://junit.org/junit5/) - used to develop tests
 * [Intellij](https://www.jetbrains.com/idea/) - ide used to code
 
-##Get the project running
+## Get the project running
 
 To those who want to play with or build upon, follow these steps:
 ```shell
@@ -39,7 +39,7 @@ maven clean install
 mvn spring-boot:run
 ```
 
-##API
+## API
 
 Make a request to this endpoint to start 
 ```shell
@@ -79,7 +79,7 @@ PUT /api/characters
 DELETE /api/characters/{id}
 ```
 
-##Circuit Breaker
+## Circuit Breaker
 
 Hystrix is used as circuit breaker
 ```java
@@ -94,7 +94,7 @@ The **fallbackMethod** in **@HystrixCommand** is used to call another method in 
 annotation **@HystrixProperty** to specify the timeout for a request. By default it uses another thread to obtain the response, 
 so the application waits for 5 seconds before transfer the execution to the method in fallbackMethod 
 
-##Cache
+## Cache
 
 All successful requests generate a new **house** on H2 database table. Before each request, a call to the database is done
 to guarantee that a request has to be made. So after the first request, all others that search for the same house api id
