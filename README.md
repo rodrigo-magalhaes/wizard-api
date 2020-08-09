@@ -88,8 +88,7 @@ Hystrix is used as circuit breaker
 ```
 **fallbackMethod** is used to call another method in case anything goes wrong.It was needed to pass a property using the 
 annotation **@HystrixProperty** to specify the timeout for a request. By default it uses another thread to obtain the response, 
-so the application waits for 5 seconds before transfer the execution to the method in fallbackMethod 
-
+so the application waits for 5 seconds before transfer the execution to the method in fallbackMethod
 
 ##Cache
 All successful requests generate a new **house** on H2 database table. Before each request, a call to the database is done
